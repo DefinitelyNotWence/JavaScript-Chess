@@ -30,6 +30,9 @@ const startPieces = [
     whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook,
 ];
 
+let playerTurn = "White";
+player.textContent = playerTurn;
+
 function drawBoard() {
     startPieces.forEach((startPiece, i) => {
         const square = document.createElement("div");
@@ -52,17 +55,101 @@ drawBoard();
 const allSquares = document.querySelectorAll("#gameboard .square");
 
 allSquares.forEach(square => {
-    square.addEventListener("dragstart", dragStart);
-    square.addEventListener("dragover", dragOver);
+    square.addEventListener("click", Click);
 })
 
+let pieceSelect = true;
+let isSquareEmpty;
 let startPosID;
+let targetPosID;
+let validMove = false;
+let posIDDiff;
+let selectedPiece;
 
-function dragStart(event) {
-    startPosID = event.target.parentNode.getAttribute("square-id");
-    draggedElement = event.target;
+// remember to remove console logs
+
+function Click(event) {
+    if (pieceSelect === true) {
+        startPosID = event.target.parentNode.getAttribute("square-id");
+        console.log(event.target.parentNode.getAttribute("square-id"));
+        selectedPiece = event.target;
+        if (startPosID !== null) {
+            pieceSelect = false;
+        }
+    } else {
+        targetPosID = event.target.getAttribute("square-id");
+        if (targetPosID === null) {
+            isSquareEmpty = false;
+            targetPosID = event.target.parentNode.getAttribute("square-id");
+        } else {
+            isSquareEmpty = true;
+        }
+        checkMoveValidity(selectedPiece.getAttribute("id"));     
+    }
 }
 
-function dragOver(event) {
-    event.preventDefault();
+function checkMoveValidity(piece) {
+    console.log(piece);
+    posIDDiff = targetPosID - startPosID;
+    console.log(posIDDiff);
+    switch(piece) {
+        case "whitePawn":
+            // if ((posIDDiff === -8) && isSquareEmpty) {
+            //     validMove = true;
+            // } else  if ((startPosID > 47) && (posIDDiff === -16) && isSquareEmpty) {
+            //     validMove = true;
+            // } else {
+            //     validMove = false;
+            // }
+            if (
+                (startPosID >= 48) && (posIDDiff === -16) && isSquareEmpty ||
+                (posIDDiff === - width) && isSquareEmpty ||
+                (posIDDiff === - width + 1) && isSquareEmpty === false ||
+                (posIDDiff === - width - 1) && isSquareEmpty === false
+            ) {
+                validMove = true;
+            } else {
+                validMove = false;
+            }
+            break;
+        case "blackPawn":
+            if ((posIDDiff === 8) && isSquareEmpty) {
+                validMove = true;
+            } else  if ((startPosID < 16) && (posIDDiff === 16) && isSquareEmpty) {
+                validMove = true;
+            } else {
+                validMove = false;
+            }
+    }
+    pieceSelect = true;
+    console.log(validMove);
 }
+
+
+
+
+// bugged drag and drop code
+
+// allSquares.forEach(square => {
+//     square.addEventListener("dragstart", dragStart);
+//     square.addEventListener("dragover", dragOver);
+//     square.addEventListener("drop", dragDrop);
+// })
+
+// let startPosID;
+// let draggedElement;
+
+// function dragStart(event) {
+//     startPosID = event.target.parentNode.getAttribute("square-id");
+//     draggedElement = event.target;
+// }
+
+// function dragOver(event) {
+//     event.preventDefault();
+// }
+
+// function dragDrop(event) {
+//     event.stopPropagation();
+//     event.target.parentNode.append(draggedElement);
+//     event.target.remove();
+// }
