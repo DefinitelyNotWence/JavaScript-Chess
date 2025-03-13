@@ -99,15 +99,14 @@ function checkMoveValidity(piece) {
     console.log(piece);
     posIDDiff = targetPosID - startPosID;
     console.log(posIDDiff);
+    const startPosX = startPosID % width; // finds the modulo of the startPos divided by the width, this gives the remainder which is the x coordinate
+    const startPosY = Math.floor(startPosID / width); // finds the y coordinate
+    const targetPosX = targetPosID % width;
+    const targetPosY = Math.floor(targetPosID / width);
+    const xDifference = Math.abs(targetPosX - startPosX);
+    const yDifference = Math.abs(targetPosY - startPosY);
     switch(piece) {
         case "whitePawn":
-            // if ((posIDDiff === -8) && isSquareEmpty) {
-            //     validMove = true;
-            // } else  if ((startPosID > 47) && (posIDDiff === -16) && isSquareEmpty) {
-            //     validMove = true;
-            // } else {
-            //     validMove = false;
-            // }
             if (
                 (startPosID >= 48) && (posIDDiff === -16) && isSquareEmpty ||
                 (posIDDiff === - width) && isSquareEmpty ||
@@ -131,13 +130,26 @@ function checkMoveValidity(piece) {
                 validMove = false;
             }
             break;
-            // if ((posIDDiff === 8) && isSquareEmpty) {
-            //     validMove = true;
-            // } else  if ((startPosID < 16) && (posIDDiff === 16) && isSquareEmpty) {
-            //     validMove = true;
-            // } else {
-            //     validMove = false;
-            // }
+        case "whiteKnight":
+            if (
+                (xDifference === 2) && (yDifference === 1) ||
+                (xDifference === 1) && (yDifference === 2)
+            ) {
+                validMove = true;
+            } else {
+                validMove = false;
+            }
+            break;
+        case "blackKnight":
+                if (
+                    (xDifference === 2) && (yDifference === 1) ||
+                    (xDifference === 1) && (yDifference === 2)
+                ) {
+                    validMove = true;
+                } else {
+                    validMove = false;
+                }
+                break;
     }
     pieceSelect = true;
     console.log(validMove);
