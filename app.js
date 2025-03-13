@@ -54,10 +54,6 @@ drawBoard();
 
 const allSquares = document.querySelectorAll("#gameboard .square");
 
-allSquares.forEach(square => {
-    square.addEventListener("click", Click);
-})
-
 let pieceSelect = true;
 let isSquareEmpty;
 let startPosID;
@@ -65,6 +61,10 @@ let targetPosID;
 let validMove = false;
 let posIDDiff;
 let selectedPiece;
+
+allSquares.forEach(square => {
+    square.addEventListener("click", Click);
+})
 
 // remember to remove console logs
 
@@ -84,7 +84,14 @@ function Click(event) {
         } else {
             isSquareEmpty = true;
         }
-        checkMoveValidity(selectedPiece.getAttribute("id"));     
+        checkMoveValidity(selectedPiece.getAttribute("id"));
+        if (validMove === true) {
+            if (isSquareEmpty === false) {
+                document.querySelector(`div[square-id="${targetPosID}"]`).removeChild(document.querySelector(`div[square-id="${targetPosID}"]`).firstChild);
+            }
+            document.querySelector(`div[square-id="${targetPosID}"]`).appendChild(selectedPiece);
+            document.querySelector(`div[square-id="${startPosID}"]`).removeChild(selectedPiece);
+        }     
     }
 }
 
@@ -113,13 +120,24 @@ function checkMoveValidity(piece) {
             }
             break;
         case "blackPawn":
-            if ((posIDDiff === 8) && isSquareEmpty) {
-                validMove = true;
-            } else  if ((startPosID < 16) && (posIDDiff === 16) && isSquareEmpty) {
+            if (
+                (startPosID < 16) && (posIDDiff === 16) && isSquareEmpty ||
+                (posIDDiff === width) && isSquareEmpty ||
+                (posIDDiff === width + 1) && isSquareEmpty === false ||
+                (posIDDiff === width - 1) && isSquareEmpty === false
+            ) {
                 validMove = true;
             } else {
                 validMove = false;
             }
+            break;
+            // if ((posIDDiff === 8) && isSquareEmpty) {
+            //     validMove = true;
+            // } else  if ((startPosID < 16) && (posIDDiff === 16) && isSquareEmpty) {
+            //     validMove = true;
+            // } else {
+            //     validMove = false;
+            // }
     }
     pieceSelect = true;
     console.log(validMove);
