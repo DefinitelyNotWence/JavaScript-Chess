@@ -130,7 +130,8 @@ function checkMoveValidity(piece) {
                 validMove = false;
             }
             break;
-        case "whiteKnight":
+        case "whiteKnight": // fallthrough
+        case "blackKnight":
             if (
                 (xDifference === 2) && (yDifference === 1) ||
                 (xDifference === 1) && (yDifference === 2)
@@ -140,16 +141,54 @@ function checkMoveValidity(piece) {
                 validMove = false;
             }
             break;
-        case "blackKnight":
-                if (
-                    (xDifference === 2) && (yDifference === 1) ||
-                    (xDifference === 1) && (yDifference === 2)
-                ) {
-                    validMove = true;
-                } else {
-                    validMove = false;
-                }
-                break;
+        case "whiteBishop": // fallthrough
+        case "blackBishop":
+            if (
+                xDifference / yDifference === 1 ||
+                xDifference / yDifference === -1
+            ) {
+                validMove = true;
+            } else {
+                validMove = false;
+            }
+            break;
+        case "whiteRook": // fallthrough
+        case "blackRook":
+            if (
+                (xDifference >= 1 || xDifference <= -1) && yDifference === 0 ||
+                (yDifference >= 1 || yDifference <= -1) && xDifference === 0
+            ) {
+                validMove = true;
+            } else {
+                validMove = false;
+            }
+            break;
+        case "whiteQueen": // fallthrough
+        case "blackQueen":
+            if (
+                (xDifference >= 1 || xDifference <= -1) && yDifference === 0 ||
+                (yDifference >= 1 || yDifference <= -1) && xDifference === 0 ||
+                xDifference / yDifference === 1 ||
+                xDifference / yDifference === -1
+            ) {
+                validMove = true;
+            } else {
+                validMove = false;
+            }
+            break;
+        case "whiteKing": // fallthrough
+        case "blackKing":
+            if (
+                (xDifference === 1 || xDifference === -1) && yDifference === 0 ||
+                (yDifference === 1 || yDifference === -1) && xDifference === 0 ||
+                (xDifference / yDifference === 1) && Math.abs(xDifference) === 1 && Math.abs(yDifference) === 1 ||
+                xDifference / yDifference === -1 && Math.abs(xDifference) === 1 && Math.abs(yDifference) === 1
+            ) {
+                validMove = true;
+            } else {
+                validMove = false;
+            }
+            break;
     }
     pieceSelect = true;
     console.log(validMove);
@@ -180,6 +219,6 @@ function checkMoveValidity(piece) {
 
 // function dragDrop(event) {
 //     event.stopPropagation();
-//     event.target.parentNode.append(draggedElement);
+//     event.target.parentNode.appendChild(draggedElement);
 //     event.target.remove();
 // }
